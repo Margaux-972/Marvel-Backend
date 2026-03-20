@@ -22,7 +22,7 @@ router.get("/comics", async (req, res) => {
         process.env.MARVEL_API_KEY +
         queries,
     );
-    // console.log(response.data);
+    console.log(response.data);
     res.status(200).json(response.data);
   } catch (error) {
     res.status(500).json({ message: error.message });
