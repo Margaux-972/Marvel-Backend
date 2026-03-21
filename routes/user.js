@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.post("/user/signup", async (req, res) => {
   try {
-    // console.log("body => ", req.body); // body =>  { email: 'm@mail.com', account: { username: 'm' }, password: 'm' }
-    // console.log(req.body.username);
+    console.log("body => ", req.body); // body =>  { email: 'm@mail.com', account: { username: 'm' }, password: 'm' }
+    console.log(req.body.username);
 
     if (!req.body.email || !req.body.password || !req.body.username) {
       return res
@@ -33,9 +33,7 @@ router.post("/user/signup", async (req, res) => {
 
     const newUser = new User({
       email: req.body.email,
-      account: {
-        username: req.body.account.username,
-      },
+      username: req.body.username,
       token: token,
       hash: hash,
       salt: salt,
@@ -82,31 +80,31 @@ router.post("/user/login", async (req, res) => {
 });
 
 // Route à tester
-router.post("/user/favorites/comics", async (req, res) => {
-  try {
-    const comic = req.body.comic;
+// router.post("/user/favorites/comics", async (req, res) => {
+//   try {
+//     const comic = req.body.comic;
 
-    const user = await User.findOne({
-      token: req.headers.authorization,
-    });
+//     const user = await User.findOne({
+//       token: req.headers.authorization,
+//     });
 
-    if (!user) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+//     if (!user) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
 
-    const alreadyExists = user.favorites.comics.find(
-      (fav) => fav.id === comic.id,
-    );
+//     const alreadyExists = user.favorites.comics.find(
+//       (fav) => fav.id === comic.id,
+//     );
 
-    if (!alreadyExists) {
-      user.favorites.comics.push(comic);
-      await user.save();
-    }
+//     if (!alreadyExists) {
+//       user.favorites.comics.push(comic);
+//       await user.save();
+//     }
 
-    res.status(200).json(user.favorites.comics);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+//     res.status(200).json(user.favorites.comics);
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// });
 
 module.exports = router;
