@@ -168,4 +168,23 @@ router.post("/user/favorites/characters", async (req, res) => {
   }
 });
 
+router.get("/user", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      token: req.headers.authorization,
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    res.status(200).json({
+      favorites: user.favorites,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
 module.exports = router;
