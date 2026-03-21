@@ -1,15 +1,15 @@
-const express = require("express");
+const User = require("../models/User");
 const uid2 = require("uid2");
+const express = require("express");
 const SHA256 = require("crypto-js/sha256");
 const encBase64 = require("crypto-js/enc-base64");
-const User = require("../models/User");
 
 const router = express.Router();
 
 router.post("/user/signup", async (req, res) => {
   try {
-    console.log("body => ", req.body); // body =>  { email: 'm@mail.com', account: { username: 'm' }, password: 'm' }
-    console.log(req.body.username);
+    // console.log("body => ", req.body); // body =>  { email: 'm@mail.com', account: { username: 'm' }, password: 'm' }
+    // console.log(req.body.username);
 
     if (!req.body.email || !req.body.password || !req.body.username) {
       return res
@@ -79,32 +79,93 @@ router.post("/user/login", async (req, res) => {
   }
 });
 
-// Route à tester
-// router.post("/user/favorites/comics", async (req, res) => {
-//   try {
-//     const comic = req.body.comic;
+router.post("/user/favorites/comics", async (req, res) => {
+  try {
+    const comic = req.body.comic;
 
-//     const user = await User.findOne({
-//       token: req.headers.authorization,
-//     });
+    const user = await User.findOne({
+      token: req.headers.authorization,
+    });
 
-//     if (!user) {
-//       return res.status(401).json({ message: "Unauthorized" });
-//     }
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-//     const alreadyExists = user.favorites.comics.find(
-//       (fav) => fav.id === comic.id,
-//     );
+    if (!user.favorites) {
+      user.favorites = { comics: [] };
+    }
 
-//     if (!alreadyExists) {
-//       user.favorites.comics.push(comic);
-//       await user.save();
-//     }
+    if (!user.favorites.comics) {
+      user.favorites.comics = [];
+    }
 
-//     res.status(200).json(user.favorites.comics);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// });
+    const formattedComic = {
+      _id: comic._id.toString(),
+      title: comic.title,
+      thumbnail: comic.thumbnail,
+    };
+
+    const index = user.favorites.comics.findIndex(
+      (fav) => fav._id.toString() === comic._id.toString(),
+    );
+    if (index !== -1) {
+      user.favorites.comics.splice(index, 1);
+    } else {
+      user.favorites.comics.push(formattedComic);
+    }
+
+    await user.save();
+
+    res.status(200).json(user.favorites.comics);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.post("/user/favorites/characters", async (req, res) => {
+  try {
+    const character = req.body.character;
+
+    const user = await User.findOne({
+      token: req.headers.authorization,
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!user.favorites) {
+      user.favorites = { characters: [] };
+    }
+
+    if (!user.favorites.characters) {
+      user.favorites.characters = [];
+    }
+
+    const formattedCharacter = {
+      _id: character._id.toString(),
+      name: character.name,
+      thumbnail: character.thumbnail,
+    };
+
+    const index = user.favorites.characters.findIndex(
+      (fav) => fav._id.toString() === character._id.toString(),
+    );
+
+    if (index !== -1) {
+      user.favorites.characters.splice(index, 1);
+    } else {
+      user.favorites.characters.push(formattedCharacter);
+    }
+
+    await user.save();
+
+    res.status(200).json(user.favorites.characters);
+  } catch (error) {
+    console.log(error);
+
+    res.status(400).json({ message: error.message });
+  }
+});
 
 module.exports = router;
