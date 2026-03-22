@@ -59,14 +59,18 @@ router.post("/user/login", async (req, res) => {
     // console.log("user => ", user);
 
     if (!user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({ message: "Mauvais email et/ou mot de passe" });
     }
 
     const newHash = SHA256(user.salt + req.body.password).toString(encBase64);
     // console.log(user.hash === newHash);
 
     if (newHash !== user.hash) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({ message: "Mauvais email et/ou mot de passe" });
     }
 
     res.json({
