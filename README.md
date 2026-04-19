@@ -1,4 +1,4 @@
-# <img src="./src/assets/images/iconemarvel.png" width="30" /> Marvel Explorer
+# <img src="./assets/iconemarvel.png" width="30" /> Marvel Explorer
 
 A web application inspired by the Marvel universe, allowing users to explore characters and comics, with a personalized favorites system available for authenticated users.
 
