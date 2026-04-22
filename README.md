@@ -1,4 +1,4 @@
-# <img src="./assets/iconemarvel.png" width="30" /> Marvel Explorer
+# <img src="./assets/iconemarvel.png" width="30" /> My Marvel
 
 A web application inspired by the Marvel universe, allowing users to explore characters and comics, with a personalized favorites system available for authenticated users.
 
@@ -60,6 +60,42 @@ Marvel Explorer is a full-stack application that consumes an external API to dyn
 
 - Performance optimization (caching)
 - Enhanced UI/UX (animations, dark mode)
+
+## Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/Margaux-972/Marvel-Backend
+cd Marvel-Backend
+```
+
+2. Install dependencies
+
+```bash
+npm install
+```
+
+3. Start the development server (Nodemon)
+
+```bash
+npx nodemon index.js
+```
+
+This starts the backend server in development mode and automatically restarts it when files change.
+
+The project runs on:
+
+```bash
+http://localhost:3000
+```
+
+---
+
+⚠️ Notes
+Make sure MongoDB is running (local or Atlas)
+
+---
 
 ## 🎯 Purpose
 
